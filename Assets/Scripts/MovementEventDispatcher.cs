@@ -7,7 +7,7 @@ public class MovementEventDispatcher : MonoBehaviour
 
     public event Action<float> OnMove;
 
-    private void Awake()
+    private void OnEnable()
     {
         for (int i = 0; i < _players.Length; i++)
         {
@@ -15,9 +15,22 @@ public class MovementEventDispatcher : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        for (int i = 0; i < _players.Length; i++)
+        {
+            UnSubscribe(_players[i]);
+        }
+    }
+
     private void Subscribe(Movement movement)
     {
         movement.OnMove += HandleMove;
+    }
+
+    private void UnSubscribe(Movement movement)
+    {
+        movement.OnMove -= HandleMove;
     }
 
     private void HandleMove()
